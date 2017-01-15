@@ -1,0 +1,199 @@
+<!doctype html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>JSilhouette Plotter</title>
+		<style>
+		#summary {
+			border: 1px solid #222255;
+			border-radius: 5px;
+			box-shadow: 1px 1px 1px 1px;
+			width: 300px;
+			margin: auto;
+			padding: 10px;
+			margin-right: 20px;
+			margin-top: 60px;
+			margin-bottom: 20px;
+			float: right;
+		}
+		#summary p:first-child {
+			margin-top: -5px;
+			padding-bottom: 5px;
+			border-bottom: 1px solid #666699;
+		}
+		.bar {
+			fill: #aaa;
+			height: 21px;
+			transition: fill .3s ease;
+			cursor: pointer;
+			font-family: Helvetica, sans-serif;
+		}
+
+		.chart:hover,
+		.chart:focus {
+			.bar {
+				fill: #aaa;
+			}
+		}
+		#chart {
+			float: left;
+			width: 800px;
+		}
+		figcaption {
+			font-weight: bold;
+			color: #000;
+			margin-bottom: 20px;
+		}
+		body {
+			font-family: 'Open Sans', sans-serif;
+		}
+		.graph .labels.x-labels {
+			text-anchor: middle;
+		}
+		.graph .labels.y-labels {
+			text-anchor: end;
+		}
+		.graph {
+			height: 500px;
+			width: 800px;
+		}
+		.grid {
+			stroke: #ccc;
+			stroke-dasharray: 0;
+			stroke-width: 1;
+		}
+		.labels {
+			font-size: 13px;
+		}
+		.label-title {
+			font-weight: bold;
+			text-transform: uppercase;
+			font-size: 12px;
+			fill: black;
+		}
+		</style>
+	</head>
+	<body>
+		<div id="summary"><p><b>Summary:</b></p><p>Number of samples: 107</p><p>Number of clusters: 10</p></div>
+		<div id="chart">
+			<figure>
+				<figcaption>Silhouette plot</figcaption>
+				<svg id="silhouetteplot" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="chart" width="1000" height="400" aria-labelledby="title" role="img">
+				<g class="grid y-grid" id="xGrid">
+					<line x1="100" x2="100" y1="35" y2="5000" stroke="black"></line>
+				</g>
+				<g class="grid y-grid" id="xGrid">
+					<line x1="300" x2="300" y1="35" y2="5000" stroke="blue"></line>
+				</g>
+				<g class="grid y-grid" id="xGrid">
+					<line x1="200" x2="200" y1="35" y2="5000"></line>
+				</g>
+				<g class="grid y-grid" id="xGrid">
+					<line x1="400" x2="400" y1="35" y2="5000"></line>
+				</g>
+				<g class="grid y-grid" id="xGrid">
+					<line x1="500" x2="500" y1="35" y2="5000"></line>
+				</g>
+				<g class="grid y-grid" id="xGrid">
+					<line x1="600" x2="600" y1="35" y2="5000"></line>
+				</g>
+				<g class="grid y-grid" id="xGrid">
+					<line x1="700" x2="700" y1="35" y2="5000"></line>
+				</g>
+				<g class="grid y-grid" id="xGrid">
+					<line x1="800" x2="800" y1="35" y2="5000"></line>
+				</g>
+				<g class="grid x-grid" id="yGrid">
+					<line x1="90" x2="820" y1="40" y2="40" stroke="black"></line>
+				</g>
+				<g class="labels x-labels">
+					<text x="100" y="30">-1</text>
+					<text x="200" y="30">-0.5</text>
+					<text x="296" y="30">0</text>
+					<text x="400" y="30">0.2</text>
+					<text x="500" y="30">0.4</text>
+					<text x="600" y="30">0.6</text>
+					<text x="700" y="30">0.8</text>
+					<text x="800" y="30">1</text>
+					<text x="400" y="10" class="label-title">Silhouette value</text>
+				</g>
+				<g class="labels y-labels">
+					<text id="ytitle" x="-200" y="60" class="label-title" transform="rotate(-90)">Cluster</text>
+				</g>
+				</svg>
+			</figure>
+		</div>
+		<script>
+		var xmlns = "http://www.w3.org/2000/svg";
+		var svg = document.getElementById("silhouetteplot");
+		var yTitle = document.getElementById("ytitle");
+		var yAxis = document.getElementsByClassName("y-labels")[0];
+		
+		/* Bidimensional array containing the silhouette coefficient per each sample */
+		var clusters = [[0.5140875049027007, 0.49667912376678663, 0.47467980623405914, 0.20927268737149568, -0.2122007769201028],
+		[0.5901529380335995, 0.5697850642645086, 0.4221129251389808, 0.3619364697412893, -0.014470925052958989, -0.1628011566564674],
+		[0.7128725805820209, 0.7128435376003558, 0.6673818622723614, 0.6210726582180266, 0.6110064220631581, 0.6107967641261183, 0.38016460727921564, 0.37879001663433476],
+		[0.9651586155181335, 0.9650092306378117, 0.9649262714619872, 0.9632441421970152, 0.9632405553529442, 0.9631664005463751, 0.9606549220884346, 0.9605302497640104, 0.9599489023920559, 0.9596379119826499, 0.9588905379060803, 0.9563992024394361, 0.9560477159916407, 0.9531341289352182, 0.952142261242041, 0.9519179565649536, 0.9486991652305523, 0.940418790515488, 0.9402635147389872, 0.9354596979111887, 0.9350834336827145],
+		[0.8608922107066189, 0.8605530322337298, 0.8593553127375045, 0.8593501193136839, 0.8567622515787432, 0.853825100118095, 0.8515938923511781, 0.8498911886783916, 0.8494303923954853, 0.8492972988645895, 0.8492634942910884, 0.8360212895171303, 0.8332674383188671, 0.8301630620746063, 0.8301577528378432, 0.8261781024063808, 0.8260363151573619, 0.825771759851724, 0.8200751270525062, 0.8197322335811863, 0.8166616903710971, 0.8150628741776434, 0.813322147654187, 0.810636088630054, 0.8079929867633493, 0.8049727185800781, 0.8023361070729466, 0.7939319902855865, 0.7804525405202734, 0.778502276485517, 0.7745933794941772, 0.7738900992055916, 0.7706717792167119, 0.7703039658018693, 0.7194126032680317, 0.630672694976278, 0.43893586041327126, 0.4156305453250945],
+		[0.829193500153798, 0.8204145287220233, 0.8072049393214787, 0.7756560725754273, 0.7555696104706312, 0.7251792912675845, 0.7106682515914031],
+		[0.7052697029812047, 0.6869988113471589, 0.6278421006407748],
+		[0.8204947565964529, 0.8204868594931277, 0.8171464941887391, 0.7745757887210045, 0.7713672218478071, 0.7643723937154508, 0.7457537474178695, 0.5992473581208471],
+		[0.8124202967823217, 0.7910885024832435, 0.7678741311967244, 0.7068730845414284,-0.878382388828,-0.92883,-1],
+		[0.5001518809639265, 0.4689044700898688, 0.4304313626818603, 0.03553511607226563]];
+		
+		var start = 42;
+		var skipped = 0;
+		
+		for (var i=0; i<clusters.length;i++) {
+			/* Consider only clusters with a significant number of objects for a better visualization */
+			if (clusters[i].length == 1) {
+				skipped+=1;
+				 continue;
+			}
+			/* Generate random color for the cluster i (< "#dddddd") */
+			var colorint = 14540254;
+			while (colorint > 14540253) colorint = ((1<<24)*Math.random()|0);
+			var color = "#"+colorint.toString(16);
+			var previous_start = start;
+			/* Iterate over the silhouette coefficients for cluster i */
+			for (var j=0; j<clusters[i].length; j++) {
+				var distance = 100;
+				if (clusters[i][j] < 0) distance = -40;
+				var g = document.createElementNS (xmlns, "g");
+				g.setAttributeNS (null, 'class', 'bar');
+				var rect = document.createElementNS (xmlns, "rect");
+				rect.setAttributeNS(null, 'fill', color);
+				var width = ((clusters[i][j] / 0.2)*distance);
+				rect.setAttributeNS(null, 'width', width.toString());
+				rect.setAttributeNS(null, 'height', '2');
+				var x = 300;
+				if (clusters[i][j] < 0) x = 300-width;
+				rect.setAttributeNS(null, 'x', x);
+				rect.setAttributeNS(null, 'y', start);
+				var title = document.createElementNS (xmlns, "title");
+				title.appendChild(document.createTextNode('Cluster '+i+': '+clusters[i].length+' objects'));
+				rect.appendChild(title);
+				g.appendChild(rect);
+				svg.appendChild(g);
+				start += 2;
+			}
+			/* Add the cluster label on the y axis */
+			var label = document.createElementNS (xmlns, "text");
+			label.appendChild(document.createTextNode(i.toString()));
+			label.setAttributeNS(null,'x','80');
+			/* Put the label at half of the height */
+			label.setAttributeNS(null,'y',previous_start+(start-previous_start)/2);
+			label.setAttributeNS(null,'text-anchor', 'middle');
+			yAxis.appendChild(label);
+			/* Space among clusters */
+			start += 10;
+		}
+		var offset = 40; /* Adjust this offset for your data */
+		var height = (clusters.length-skipped)*offset;
+		svg.setAttributeNS(null,'height',height.toString());
+		/* Center the yTitle */
+		yTitle.setAttributeNS(null,'x',-(height/2+40));
+		</script>
+	</body>
+</html>
