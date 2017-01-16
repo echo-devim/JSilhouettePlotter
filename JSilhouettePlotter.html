@@ -158,12 +158,12 @@
 			while (colorint > 14540253) colorint = ((1<<24)*Math.random()|0);
 			var color = "#"+colorint.toString(16);
 			var previous_start = start;
+			var g = document.createElementNS (xmlns, "g");
+			g.setAttributeNS (null, 'class', 'bar');
 			/* Iterate over the silhouette coefficients for cluster i */
 			for (var j=0; j<clusters[i].length; j++) {
 				var distance = 100;
 				if (clusters[i][j] < 0) distance = -40;
-				var g = document.createElementNS (xmlns, "g");
-				g.setAttributeNS (null, 'class', 'bar');
 				var rect = document.createElementNS (xmlns, "rect");
 				rect.setAttributeNS(null, 'fill', color);
 				var width = ((clusters[i][j] / 0.2)*distance);
