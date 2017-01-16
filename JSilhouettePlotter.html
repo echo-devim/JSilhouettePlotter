@@ -160,6 +160,7 @@
 			var previous_start = start;
 			var g = document.createElementNS (xmlns, "g");
 			g.setAttributeNS (null, 'class', 'bar');
+			g.setAttributeNS(null, 'onclick', 'console.log(' +clusters[i].length+ ')');
 			/* Iterate over the silhouette coefficients for cluster i */
 			for (var j=0; j<clusters[i].length; j++) {
 				var distance = 100;
