@@ -194,7 +194,7 @@
 		}
 		var offset = 0;
 		for (var i = 0; i < clusters.length; i++) offset += clusters[i].length;
-		var height = (offset * 2) + (clusters.length * spacing) + 50;
+		var height = ((offset-skipped) * 2) + ((clusters.length-skipped) * spacing) + 50;
 		svg.setAttributeNS(null,'height',height.toString());
 		/* Center the yTitle */
 		yTitle.setAttributeNS(null,'x',-(height/2+40));
