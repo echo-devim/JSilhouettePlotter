@@ -143,6 +143,8 @@
 		[0.5001518809639265, 0.4689044700898688, 0.4304313626818603, 0.03553511607226563]];
 		
 		var start = 42;
+		/* Space between two plotted clusters */
+		var spacing  = 10;
 		var skipped = 0;
 		
 		for (var i=0; i<clusters.length;i++) {
@@ -187,10 +189,11 @@
 			label.setAttributeNS(null,'text-anchor', 'middle');
 			yAxis.appendChild(label);
 			/* Space among clusters */
-			start += 10;
+			start += spacing;
 		}
-		var offset = 40; /* Adjust this offset for your data */
-		var height = (clusters.length-skipped)*offset;
+		var offset = 0;
+		for (var i = 0; i < clusters.length; i++) offset += clusters[i].length;
+		var height = (offset * 2) + (clusters.length * spacing) + 50;
 		svg.setAttributeNS(null,'height',height.toString());
 		/* Center the yTitle */
 		yTitle.setAttributeNS(null,'x',-(height/2+40));
